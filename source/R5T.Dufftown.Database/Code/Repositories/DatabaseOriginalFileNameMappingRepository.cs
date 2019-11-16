@@ -6,8 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using R5T.Sparta;
 using R5T.Venetia;
 
-using OriginalFileNameMappingEntity = R5T.Dufftown.Database.Entities.OriginalFileNameMapping;
-
 
 namespace R5T.Dufftown.Database
 {
