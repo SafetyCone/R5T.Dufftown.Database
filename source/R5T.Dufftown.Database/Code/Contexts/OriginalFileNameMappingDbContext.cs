@@ -10,7 +10,7 @@ namespace R5T.Dufftown.Database
         public DbSet<Entities.OriginalFileNameMapping> OriginalFileNameMappings { get; set; }
 
 
-        public OriginalFileNameMappingDbContext(DbContextOptions options)
+        public OriginalFileNameMappingDbContext(DbContextOptions<OriginalFileNameMappingDbContext> options)
             : base(options)
         {
         }
