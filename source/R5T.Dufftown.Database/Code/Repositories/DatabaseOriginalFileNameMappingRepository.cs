@@ -9,17 +9,12 @@ using R5T.Venetia;
 
 namespace R5T.Dufftown.Database
 {
-    public class DatabaseOriginalFileNameMappingRepository : DatabaseRepositoryBase<OriginalFileNameMappingDbContext>, IOriginalFileNameMappingRepository
+    public class DatabaseOriginalFileNameMappingRepository<TDbContext> : ProvidedDatabaseRepositoryBase<TDbContext>, IOriginalFileNameMappingRepository
+        where TDbContext: DbContext, IOriginalFileNameMappingDbContext
     {
-        public DatabaseOriginalFileNameMappingRepository(DbContextOptions<OriginalFileNameMappingDbContext> dbContextOptions)
-            : base(dbContextOptions)
+        public DatabaseOriginalFileNameMappingRepository(DbContextOptions<TDbContext> dbContextOptions, IDbContextProvider<TDbContext> dbContextProvider)
+            : base(dbContextOptions, dbContextProvider)
         {
-        }
-
-        public override OriginalFileNameMappingDbContext GetNewDbContext()
-        {
-            var dbContext = new OriginalFileNameMappingDbContext(this.DbContextOptions);
-            return dbContext;
         }
 
         public void Add(OriginalFileNameMapping mapping)
