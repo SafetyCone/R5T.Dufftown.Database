@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -17,50 +18,54 @@ namespace R5T.Dufftown.Database
         {
         }
 
-        public void Add(OriginalFileNameMapping mapping)
+        public async Task Add(OriginalFileNameMapping mapping)
         {
             var mappingEntity = mapping.ToEntityType();
 
-            using (var dbContext = this.GetNewDbContext())
+            await this.ExecuteInContextAsync(async dbContext =>
             {
                 dbContext.OriginalFileNameMappings.Add(mappingEntity);
 
-                dbContext.SaveChanges();
-            }
+                await dbContext.SaveChangesAsync();
+            });
         }
 
-        public void Delete(FileName uniqueFileName)
+        public async Task Delete(FileName uniqueFileName)
         {
-            using (var dbContext = this.GetNewDbContext())
+            await this.ExecuteInContextAsync(async dbContext =>
             {
-                var entity = dbContext.OriginalFileNameMappings.Where(x => x.UniqueFileName == uniqueFileName.Value).Single();
+                var entity = await dbContext.OriginalFileNameMappings.Where(x => x.UniqueFileName == uniqueFileName.Value).SingleAsync();
 
                 dbContext.Remove(entity);
 
-                dbContext.SaveChanges();
-            }   
+                await dbContext.SaveChangesAsync();
+            });
         }
 
-        public bool Exists(FileName uniqueFileName)
+        public async Task<bool> Exists(FileName uniqueFileName)
         {
-            using (var dbContext = this.GetNewDbContext())
+            var exists = await this.ExecuteInContextAsync(async dbContext =>
             {
-                var entityOrDefault = dbContext.OriginalFileNameMappings.Where(x => x.UniqueFileName == uniqueFileName.Value).SingleOrDefault();
+                var entityOrDefault = await dbContext.OriginalFileNameMappings.Where(x => x.UniqueFileName == uniqueFileName.Value).SingleOrDefaultAsync();
 
                 var output = entityOrDefault == default;
                 return output;
-            }
+            });
+
+            return exists;
         }
 
-        public OriginalFileNameMapping Get(FileName uniqueFileName)
+        public async Task<OriginalFileNameMapping> Get(FileName uniqueFileName)
         {
-            using (var dbContext = this.GetNewDbContext())
+            var originalFileNameMapping = await this.ExecuteInContextAsync(async dbContext =>
             {
-                var entity = dbContext.OriginalFileNameMappings.Where(x => x.UniqueFileName == uniqueFileName.Value).Single();
+                var entity = await dbContext.OriginalFileNameMappings.Where(x => x.UniqueFileName == uniqueFileName.Value).SingleAsync();
 
                 var appType = entity.ToAppType();
                 return appType;
-            }
+            });
+
+            return originalFileNameMapping;
         }
     }
 }
