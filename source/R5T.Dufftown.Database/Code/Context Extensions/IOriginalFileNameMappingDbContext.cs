@@ -7,6 +7,6 @@ namespace R5T.Dufftown.Database
 {
     public interface IOriginalFileNameMappingDbContext
     {
-        DbSet<Entities.OriginalFileNameMapping> OriginalFileNameMappings { get; set; }
+        DbSet<Entities.OriginalFileNameMapping> OriginalFileNameMappings { get; }
     }
 }
